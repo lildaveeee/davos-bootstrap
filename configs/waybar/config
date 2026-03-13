@@ -1,0 +1,103 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin":"4 4 0 4",
+  "on-sigusr1": "toggle",
+  "start_hidden": true,
+  "exclusive": true,
+  "modules-left": [
+    "hyprland/workspaces",
+    "custom/mpd"
+  ],
+  "modules-center": ["hyprland/window"],
+  "modules-right": [
+    "pulseaudio",
+    "network",
+    "cpu",
+    "memory",
+    "tray",
+    "clock"
+  ],
+  "hyprland/window": {
+    "format": "{}",
+    "rewrite": {
+      "^\\s*$": "null"  
+    },
+    "empty-window": true
+  },
+  "hyprland/workspaces": {
+    "spacing":4,
+    "disable-scroll": true,
+    "all-outputs": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1:web": "",
+      "2:code": "",
+      "3:term": "",
+      "4:work": "",
+      "5:music": "",
+      "6:docs": "",
+      "urgent": "",
+      "focused": "",
+      "default": ""
+    }
+  },
+  "tray": {
+    "spacing": 4
+  },
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "format-alt": "{:%d/%m/%Y}"
+  },
+  "cpu": {
+    "format": "{usage}% "
+  },
+  "memory": {
+    "format": "{}% "
+  },
+  "network": {
+    "format-wifi": "{ipaddr}) - ({bandwidthDownBits}, {signalStrength}%) ",
+    "format-ethernet": "{ipaddr} ",
+    "format-disconnected": "No network ⚠",
+    "interval": 0.5
+  },
+  "pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{volume}% {icon}",
+    "format-muted": "",
+    "format-icons": {
+      "headphones": "",
+      "handsfree": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", ""]
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
+  "custom/mpd": {
+    "format": " {}",
+    "max-length": 40,
+    "interval": 5,
+    "exec": "$HOME/.config/waybar/mediaplayer.sh",
+    "on-click": "rmpc togglepause",
+    "on-scroll-up": "rmpc next",
+    "on-scroll-down": "rmpc prev"
+  },
+  "custom/separator": {
+    "exec": "echo ' | '",
+    "interval": 60
+  },
+  "custom/firefox": {
+    "exec": "echo ''",
+    "interval": 60,
+    "on-click": "firefox-developer-edition"
+  },
+  "custom/kitty": {
+    "exec": "echo ''",
+    "interval": 60,
+    "on-click": "kitty"
+  }
+}
