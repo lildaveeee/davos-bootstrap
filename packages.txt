@@ -1,8 +1,0 @@
-waybar
-nvim
-yazi
-cava
-alacritty
-kitty
-firefox
-
