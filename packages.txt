@@ -13,3 +13,5 @@ hyprpaper
 imagemagick
 dolphin
 thunar
+rofi
+wofi
