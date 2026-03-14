@@ -10,3 +10,4 @@ spotify-launcher
 fastfetch
 hyprpolkitagent
 hyprpaper
+imagemagick
