@@ -27,6 +27,15 @@ if [[ ! -d "$SCR_DIR" ]]; then
     exit 1
 fi
 
+# --- NEW: Make scripts executable before copying ---
+if [[ -f "$CONFIG_DIR/waybar/mediaplayer.sh" ]]; then
+    chmod +x "$CONFIG_DIR/waybar/mediaplayer.sh"
+fi
+
+if compgen -G "$SCR_DIR/ConfigColors/*" > /dev/null; then
+    chmod +x "$SCR_DIR/ConfigColors/"*
+fi
+
 mkdir -p "$USER_CONFIG"
 mkdir -p "$USER_SCR"
 
@@ -46,7 +55,7 @@ if ! command -v yay >/dev/null 2>&1; then
 fi
 
 yay -S --noconfirm vesktop
-yay -S --noconfirm steam
+yay -S --noconfirm steam-native-runtime
 
 sudo sed -i 's/Arch Linux/davos/g' /etc/os-release
 sudo sed -i 's/Arch Linux/davos/g' /usr/lib/os-release
