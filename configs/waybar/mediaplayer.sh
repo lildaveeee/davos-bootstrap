@@ -1,26 +1,23 @@
-
 #!/bin/sh
 
 escape_markup() {
     sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
 }
 
-state=$(rmpc status | jq -r '.state')
-
-artist=$(rmpc song | jq -r '.metadata.artist // empty' | escape_markup)
-title=$(rmpc song | jq -r '.metadata.title // empty' | escape_markup)
+state=$(playerctl --player=spotify status 2>/dev/null)
+artist=$(playerctl --player=spotify metadata artist 2>/dev/null | escape_markup)
+title=$(playerctl --player=spotify metadata title 2>/dev/null | escape_markup)
 
 [ -z "$title" ] && exit 0
 
-if [ "$state" = "Play" ]; then
+if [ "$state" = "Playing" ]; then
     echo "$artist - $title"
     exit 0
 fi
 
-if [ "$state" = "Pause" ]; then
+if [ "$state" = "Paused" ]; then
     echo " $artist - $title"
     exit 0
 fi
 
 exit 0
-
