@@ -54,7 +54,7 @@ if ! command -v yay >/dev/null 2>&1; then
 fi
 
 yay -S --noconfirm vesktop
-yay -S --noconfirm steam-native-runtime
+yay -S --noconfirm steam
 
 sudo sed -i 's/Arch Linux/davos/g' /etc/os-release
 sudo sed -i 's/Arch Linux/davos/g' /usr/lib/os-release
