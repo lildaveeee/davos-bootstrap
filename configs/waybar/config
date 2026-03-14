@@ -82,9 +82,9 @@
     "max-length": 40,
     "interval": 5,
     "exec": "$HOME/.config/waybar/mediaplayer.sh",
-    "on-click": "rmpc togglepause",
-    "on-scroll-up": "rmpc next",
-    "on-scroll-down": "rmpc prev"
+    "on-click": "playerctl --player=spotify play-pause",
+    "on-scroll-up": "playerctl --player=spotify next",
+    "on-scroll-down": "playerctl --player=spotify previous"
   },
   "custom/separator": {
     "exec": "echo ' | '",
