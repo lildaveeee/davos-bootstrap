@@ -9,3 +9,4 @@ jq
 spotify-launcher
 fastfetch
 hyprpolkitagent
+hyprpaper
