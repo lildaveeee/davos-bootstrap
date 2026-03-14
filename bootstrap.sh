@@ -27,7 +27,6 @@ if [[ ! -d "$SCR_DIR" ]]; then
     exit 1
 fi
 
-# --- NEW: Make scripts executable before copying ---
 if [[ -f "$CONFIG_DIR/waybar/mediaplayer.sh" ]]; then
     chmod +x "$CONFIG_DIR/waybar/mediaplayer.sh"
 fi
