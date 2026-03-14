@@ -11,3 +11,5 @@ fastfetch
 hyprpolkitagent
 hyprpaper
 imagemagick
+dolphin
+thunar
