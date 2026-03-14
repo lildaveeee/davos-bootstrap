@@ -8,3 +8,4 @@ firefox
 jq
 spotify-launcher
 fastfetch
+hyprpolkitagent
