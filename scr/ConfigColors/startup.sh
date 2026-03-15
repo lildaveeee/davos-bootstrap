@@ -5,11 +5,16 @@ set -euo pipefail
 DIR="$(cd "$(dirname "$0")" && pwd)"
 STATE_FILE="$DIR/state.txt"
 
-CHOICE=$(printf "Music\nCustom" | dmenu -p "Choose mode:")
+if [ ! -f "$STATE_FILE" ]; then
+    echo "CHOICE=Music" > "$STATE_FILE"
+    exit 0
+fi
 
-[ -z "$CHOICE" ] && exit 0
+CURRENT=$(grep '^CHOICE=' "$STATE_FILE" | cut -d= -f2)
 
-{
-    echo "CHOICE=$CHOICE"
-} > "$STATE_FILE"
+if [ "$CURRENT" = "Music" ]; then
+    echo "CHOICE=Custom" > "$STATE_FILE"
+else
+    echo "CHOICE=Music" > "$STATE_FILE"
+fi
 
