@@ -3,44 +3,35 @@
 set -euo pipefail
 
 BASE_DIR="$(dirname "$(realpath "$0")")"
+STATE_FILE="$BASE_DIR/state.txt"
+
 IMAGE_DIR="$BASE_DIR/images"
 BACKGROUND_DIR="$BASE_DIR/backgrounds"
-STATE_FILE="$BASE_DIR/state.txt"
-RUN2="$BASE_DIR/run2.sh"
+
+WALL_DIR="$HOME/Pictures/Wallpapers"
+mkdir -p "$IMAGE_DIR" "$BACKGROUND_DIR" "$WALL_DIR"
 
 ALBUM_ART_IMAGE="$IMAGE_DIR/albumArt.jpg"
 TEMP_ART="$IMAGE_DIR/albumArt.tmp.jpg"
 RESIZED_ART="$IMAGE_DIR/albumArt.resized.jpg"
+
 RES_WIDTH=2560
 RES_HEIGHT=1440
-
-mkdir -p "$IMAGE_DIR" "$BACKGROUND_DIR"
 
 get_mode() {
     if [ -f "$STATE_FILE" ]; then
         grep '^CHOICE=' "$STATE_FILE" | cut -d= -f2
     else
-        echo ""
+        echo "Music"
     fi
 }
 
-last_mode="$(get_mode)"
-
-get_last_modified_time() {
-    if [ -f "$ALBUM_ART_IMAGE" ]; then
-        stat --format=%Y "$ALBUM_ART_IMAGE" 2>/dev/null
-    else
-        echo 0
-    fi
-}
-
-previous_timestamp=$(get_last_modified_time)
-
-if command -v swww-daemon &>/dev/null; then
-  if ! pgrep -x swww-daemon &>/dev/null; then
+# Start swww-daemon if needed
+if ! pgrep -x swww-daemon >/dev/null; then
     swww-daemon & sleep 1
-  fi
 fi
+
+# --- MUSIC MODE ---
 
 fetch_album_art() {
     ART_URL=$(playerctl --player=spotify metadata mpris:artUrl || true)
@@ -51,8 +42,6 @@ fetch_album_art() {
         else
             curl -sL "$ART_URL" -o "$TEMP_ART"
         fi
-    else
-        rmpc albumart --output "$TEMP_ART" || true
     fi
 
     if [ ! -s "$TEMP_ART" ]; then
@@ -71,7 +60,7 @@ fetch_album_art() {
     mv "$RESIZED_ART" "$ALBUM_ART_IMAGE"
 }
 
-generate_wallpaper() {
+generate_music_wallpaper() {
     album_image="$ALBUM_ART_IMAGE"
     background_image="$BACKGROUND_DIR/background.jpg"
     blurred_image="$BACKGROUND_DIR/blurred_album.jpg"
@@ -83,32 +72,40 @@ generate_wallpaper() {
     magick "$blurred_image" "$album_image" \
         -geometry +$(( (RES_WIDTH - 600) / 2 ))+$(( (RES_HEIGHT - 600) / 2 )) \
         -composite "$background_image"
+
+    swww img "$background_image"
 }
 
+# --- CUSTOM MODE ---
+
+select_wallpaper() {
+    CHOICE=$(ls "$WALL_DIR" | dmenu -p "Select wallpaper:")
+    [ -z "$CHOICE" ] && return 1
+
+    WALL="$WALL_DIR/$CHOICE"
+    swww img "$WALL"
+}
+
+# --- MAIN LOOP ---
+
+last_mode=""
+
 while true; do
-    # Check state.txt regularly
-    current_mode="$(get_mode)"
-    if [ "$current_mode" = "Custom" ] && [ "$last_mode" != "Custom" ]; then
-        pkill -f "swww-daemon" || true
-        pkill -f "magick" || true
-        pkill -f "convert" || true
-        exec "$RUN2"
-    fi
-    last_mode="$current_mode"
+    mode="$(get_mode)"
 
-    # Album art logic
-    fetch_album_art || true
-    current_timestamp=$(get_last_modified_time)
-
-    if [ "$current_timestamp" -ne "$previous_timestamp" ]; then
-        generate_wallpaper
-        ABS_PATH="$(realpath "$BACKGROUND_DIR/background.jpg")"
-        if [ -f "$ABS_PATH" ]; then
-            swww img "$ABS_PATH"
-            previous_timestamp="$current_timestamp"
+    # Mode changed → react immediately
+    if [ "$mode" != "$last_mode" ]; then
+        if [ "$mode" = "Custom" ]; then
+            select_wallpaper
         fi
     fi
 
-    sleep 2
+    # Music mode runs continuously
+    if [ "$mode" = "Music" ]; then
+        fetch_album_art && generate_music_wallpaper
+    fi
+
+    last_mode="$mode"
+    sleep 5
 done
 
