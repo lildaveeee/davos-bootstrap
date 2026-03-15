@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -31,7 +30,6 @@ if ! pgrep -x swww-daemon >/dev/null; then
     swww-daemon & sleep 1
 fi
 
-# --- MUSIC MODE ---
 
 fetch_album_art() {
     ART_URL=$(playerctl --player=spotify metadata mpris:artUrl || true)
@@ -76,7 +74,6 @@ generate_music_wallpaper() {
     swww img "$background_image"
 }
 
-# --- CUSTOM MODE ---
 
 select_wallpaper() {
     CHOICE=$(ls "$WALL_DIR" | dmenu -p "Select wallpaper:")
@@ -86,7 +83,6 @@ select_wallpaper() {
     swww img "$WALL"
 }
 
-# --- MAIN LOOP ---
 
 last_mode=""
 
@@ -108,4 +104,3 @@ while true; do
     last_mode="$mode"
     sleep 5
 done
-
