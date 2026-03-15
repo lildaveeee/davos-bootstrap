@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -19,7 +18,10 @@ get_mode() {
     fi
 }
 
-last_mode="$(get_mode)"
+# Start swww-daemon if not running
+if ! pgrep -x swww-daemon >/dev/null; then
+    swww-daemon & sleep 1
+fi
 
 apply_wallpaper() {
     if [ -f "$SELECTED_WALL" ]; then
@@ -27,19 +29,19 @@ apply_wallpaper() {
     fi
 }
 
+# Apply wallpaper immediately
 apply_wallpaper
+
+last_mode="$(get_mode)"
 
 while true; do
     current_mode="$(get_mode)"
 
-    if [ "$current_mode" = "MUSIC" ] && [ "$last_mode" != "MUSIC" ]; then
-        pkill -f "swww-daemon" || true
-        pkill -f "magick" || true
-        pkill -f "convert" || true
+    # Switch back to run.sh when mode becomes Music
+    if [ "$current_mode" = "Music" ] && [ "$last_mode" != "Music" ]; then
         exec "$RUN1"
     fi
 
     last_mode="$current_mode"
     sleep 1
 done
-
