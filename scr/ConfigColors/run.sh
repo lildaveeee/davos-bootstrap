@@ -24,6 +24,7 @@ get_wallpaper() {
     grep '^WALLPAPER=' "$STATE_FILE" | cut -d= -f2
 }
 
+# --- DETECT swww OR awww ---
 
 if command -v swww-daemon >/dev/null 2>&1; then
     WALL_BIN="swww"
@@ -34,10 +35,12 @@ else
     exit 1
 fi
 
+# Start daemon if needed
 if ! pgrep -x "$WALL_BIN-daemon" >/dev/null; then
     "$WALL_BIN-daemon" & sleep 1
 fi
 
+# --- MUSIC MODE ---
 
 fetch_album_art() {
     ART_URL=$(playerctl --player=spotify metadata mpris:artUrl || true)
@@ -82,6 +85,8 @@ generate_music_wallpaper() {
     "$WALL_BIN" img "$background_image"
 }
 
+# --- CUSTOM MODE ---
+
 apply_custom_wallpaper() {
     WALL=$(get_wallpaper)
     [ -z "$WALL" ] && return
@@ -89,18 +94,21 @@ apply_custom_wallpaper() {
     "$WALL_BIN" img "$WALL"
 }
 
+# --- MAIN LOOP ---
 
 last_mode=""
 
 while true; do
     mode="$(get_mode)"
 
+    # Mode changed → react immediately
     if [ "$mode" != "$last_mode" ]; then
         if [ "$mode" = "Custom" ]; then
             apply_custom_wallpaper
         fi
     fi
 
+    # Music mode runs continuously
     if [ "$mode" = "Music" ]; then
         fetch_album_art && generate_music_wallpaper
     fi
