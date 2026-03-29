@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -25,12 +24,10 @@ get_wallpaper() {
     grep '^WALLPAPER=' "$STATE_FILE" | cut -d= -f2
 }
 
-# Start swww-daemon if needed
 if ! pgrep -x swww-daemon >/dev/null; then
     swww-daemon & sleep 1
 fi
 
-# --- MUSIC MODE ---
 
 fetch_album_art() {
     ART_URL=$(playerctl --player=spotify metadata mpris:artUrl || true)
@@ -75,7 +72,6 @@ generate_music_wallpaper() {
     swww img "$background_image"
 }
 
-# --- CUSTOM MODE ---
 
 apply_custom_wallpaper() {
     WALL=$(get_wallpaper)
@@ -84,21 +80,18 @@ apply_custom_wallpaper() {
     swww img "$WALL"
 }
 
-# --- MAIN LOOP ---
 
 last_mode=""
 
 while true; do
     mode="$(get_mode)"
 
-    # Mode changed → react immediately
     if [ "$mode" != "$last_mode" ]; then
         if [ "$mode" = "Custom" ]; then
             apply_custom_wallpaper
         fi
     fi
 
-    # Music mode runs continuously
     if [ "$mode" = "Music" ]; then
         fetch_album_art && generate_music_wallpaper
     fi
@@ -106,4 +99,5 @@ while true; do
     last_mode="$mode"
     sleep 5
 done
+
 
