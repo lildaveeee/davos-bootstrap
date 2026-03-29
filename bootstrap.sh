@@ -59,7 +59,6 @@ fi
 
 yay -S --noconfirm vesktop
 yay -S --noconfirm steam
-yay -S --noconfirm walt-git
 
 mkdir -p "$USER_HOME/.local/share/applications"
 
