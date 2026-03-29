@@ -15,7 +15,7 @@ dolphin
 thunar
 rofi
 wofi
-swww
+awww
 drawing
 mpv
 dmenu
