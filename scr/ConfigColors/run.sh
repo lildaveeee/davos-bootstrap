@@ -24,8 +24,18 @@ get_wallpaper() {
     grep '^WALLPAPER=' "$STATE_FILE" | cut -d= -f2
 }
 
-if ! pgrep -x swww-daemon >/dev/null; then
-    swww-daemon & sleep 1
+
+if command -v swww-daemon >/dev/null 2>&1; then
+    WALL_BIN="swww"
+elif command -v awww-daemon >/dev/null 2>&1; then
+    WALL_BIN="awww"
+else
+    echo "[!] Neither swww nor awww is installed!"
+    exit 1
+fi
+
+if ! pgrep -x "$WALL_BIN-daemon" >/dev/null; then
+    "$WALL_BIN-daemon" & sleep 1
 fi
 
 
@@ -69,15 +79,14 @@ generate_music_wallpaper() {
         -geometry +$(( (RES_WIDTH - 600) / 2 ))+$(( (RES_HEIGHT - 600) / 2 )) \
         -composite "$background_image"
 
-    swww img "$background_image"
+    "$WALL_BIN" img "$background_image"
 }
-
 
 apply_custom_wallpaper() {
     WALL=$(get_wallpaper)
     [ -z "$WALL" ] && return
     [ ! -f "$WALL" ] && return
-    swww img "$WALL"
+    "$WALL_BIN" img "$WALL"
 }
 
 
@@ -99,5 +108,3 @@ while true; do
     last_mode="$mode"
     sleep 5
 done
-
-
