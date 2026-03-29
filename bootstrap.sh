@@ -77,7 +77,7 @@ xdg-mime default mpv.desktop video/webm
 xdg-mime default mpv.desktop video/avi
 xdg-mime default mpv.desktop video/mpeg
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 APP_DIR="$SCRIPT_DIR/applications"
 
 if [[ -d "$APP_DIR" ]]; then
