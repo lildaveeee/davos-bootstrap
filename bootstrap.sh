@@ -77,10 +77,9 @@ xdg-mime default mpv.desktop video/webm
 xdg-mime default mpv.desktop video/avi
 xdg-mime default mpv.desktop video/mpeg
 
-APP_DIR="./applications"
-TARGET_APP_DIR="$USER_HOME/.local/share/applications/AppImages"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$SCRIPT_DIR/applications"
 
-mkdir -p "$TARGET_APP_DIR"
 if [[ -d "$APP_DIR" ]]; then
     echo "[*] Processing AppImages in $APP_DIR..."
 
@@ -89,9 +88,7 @@ if [[ -d "$APP_DIR" ]]; then
 
         filename=$(basename "$appimage")
         name="${filename%.AppImage}"
-
-        cp "$appimage" "$TARGET_APP_DIR/$filename"
-        chmod +x "$TARGET_APP_DIR/$filename"
+        appimage_path="$(realpath "$appimage")"
 
         desktop_file="$USER_HOME/.local/share/applications/$name.desktop"
 
@@ -99,19 +96,21 @@ if [[ -d "$APP_DIR" ]]; then
 [Desktop Entry]
 Type=Application
 Name=$name
-Exec=$TARGET_APP_DIR/$filename
-Icon=$TARGET_APP_DIR/$filename
+Exec=$appimage_path
+Icon=$appimage_path
 Terminal=false
 Categories=Utility;
 EOF
 
-        echo "[+] Installed AppImage: $name"
+        echo "[+] Registered AppImage: $name → $appimage_path"
     done
 
     update-desktop-database "$USER_HOME/.local/share/applications" 2>/dev/null || true
 else
     echo "[!] ./applications folder not found!"
 fi
+
+
 
 sudo sed -i 's/Arch Linux/davos/g' /etc/os-release
 sudo sed -i 's/Arch Linux/davos/g' /usr/lib/os-release
