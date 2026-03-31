@@ -1,10 +1,12 @@
 import "."
-import QtQuick
-import SddmComponents
-import QtQuick.Effects
-import QtMultimedia
 import "components"
 
+import QtQuick 2.15
+import QtQuick.Effects 1.15
+import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
+import QtMultimedia 5.15
+import SddmComponents 2.0
 Item {
     id: root
     state: Config.lockScreenDisplay ? "lockState" : "loginState"
