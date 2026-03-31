@@ -6,7 +6,7 @@ This project provides a streamlined bootstrap script that automates the initial 
 ---
 
 ## Installation
-
+'''bash
 git clone https://github.com/lildaveeee/davos-bootstrap.git && cd davos-bootstrap && chmod +x bootstrap.sh && ./bootstrap.sh
 
 Alternatively follow these steps to install Davos Bootstrap on your system:
