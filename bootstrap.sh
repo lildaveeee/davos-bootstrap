@@ -100,8 +100,8 @@ git clone -b main --depth=1 https://github.com/uiriansan/SilentSDDM \
 && sleep 2 \
 && sudo sync \
 && sudo cp "$SCRIPT_DIR/visuals/backgrounds/background.jpg" /usr/share/sddm/themes/silent/backgrounds/smoky.jpg \
-&& sudo sed -i 's/smoky\.jpg/background.jpg/g' /usr/share/sddm/themes/silent/configs/default.conf
 
+&& sudo cp "$SCRIPT_DIR/visuals/backgrounds/background.jpg" /usr/share/sddm/themes/silent/backgrounds/default.jpg \
 sudo sed -i 's/Arch Linux/davos/g' /etc/os-release
 sudo sed -i 's/Arch Linux/davos/g' /usr/lib/os-release
 
