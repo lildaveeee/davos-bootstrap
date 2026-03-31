@@ -28,3 +28,30 @@ cd davos-bootstrap-main
 chmod +x bootstrap.sh
 
 ---
+
+## Features
+
+Davos Bootstrap provides a curated, cohesive desktop experience built on top of Arch Linux, combining performance, customization, and convenience.
+
+### **Custom Native Application Suite**
+A tailored collection of first‑party, Davos‑branded applications designed to integrate seamlessly with the environment:
+
+- **Davos File Explorer** – lightweight, fast, and clean  
+- **Davos Web Browser** – privacy‑focused and performance‑optimized  
+- Additional native utilities crafted specifically for the Davos ecosystem
+
+### **Preconfigured System Components**
+To ensure a smooth out‑of‑the‑box experience, Davos Bootstrap includes:
+
+- **Hyprland** as the default window manager, featuring custom keybinds  
+- **SDDM** preconfigured with a custom theme  
+- **Firewall** enabled and configured with sensible defaults  
+- **Optimized system settings** for responsiveness and stability
+
+### **Essential Applications Included**
+For convenience, several commonly used applications come preinstalled:
+
+- **Vencord**  
+- **Steam**  
+- **Spotify**  
+- Additional everyday tools to get you started immediately
