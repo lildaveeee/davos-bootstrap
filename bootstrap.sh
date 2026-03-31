@@ -77,6 +77,7 @@ xdg-mime default mpv.desktop video/x-matroska
 xdg-mime default mpv.desktop video/webm
 xdg-mime default mpv.desktop video/avi
 xdg-mime default mpv.desktop video/mpeg
+
 cd "$ORIGINAL_DIR"
 SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 APP_DIR="$SCRIPT_DIR/applications"
@@ -90,6 +91,38 @@ if [[ -d "$APP_DIR" ]]; then
 else
     echo "[!] ./applications folder not found!"
 fi
+
+SDDM_THEMES="/usr/share/sddm/themes"
+CUSTOM_THEME_SRC="$SCRIPT_DIR/ls/davosSDDM"
+CUSTOM_THEME_DEST="$SDDM_THEMES/davosSDDM"
+CUSTOM_SDDM_CONF_SRC="$SCRIPT_DIR/ls/sddm.conf"
+SYSTEM_SDDM_CONF="/etc/sddm.conf"
+
+if [[ ! -d "$SDDM_THEMES" ]]; then
+    echo "[*] Creating SDDM themes directory at $SDDM_THEMES"
+    sudo mkdir -p "$SDDM_THEMES"
+fi
+
+if [[ -d "$CUSTOM_THEME_SRC" ]]; then
+    echo "[*] Installing custom SDDM theme: davosSDDM"
+
+    if [[ -d "$CUSTOM_THEME_DEST" ]]; then
+        echo "[*] Removing existing davosSDDM theme"
+        sudo rm -rf "$CUSTOM_THEME_DEST"
+    fi
+
+    sudo cp -r "$CUSTOM_THEME_SRC" "$CUSTOM_THEME_DEST"
+else
+    echo "[!] Custom SDDM theme folder not found at: $CUSTOM_THEME_SRC"
+fi
+
+if [[ -f "$CUSTOM_SDDM_CONF_SRC" ]]; then
+    echo "[*] Installing custom sddm.conf"
+    sudo cp "$CUSTOM_SDDM_CONF_SRC" "$SYSTEM_SDDM_CONF"
+else
+    echo "[!] No sddm.conf found at: $CUSTOM_SDDM_CONF_SRC"
+fi
+
 sudo sed -i 's/Arch Linux/davos/g' /etc/os-release
 sudo sed -i 's/Arch Linux/davos/g' /usr/lib/os-release
 
