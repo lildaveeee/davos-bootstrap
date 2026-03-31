@@ -92,6 +92,9 @@ else
     echo "[!] ./applications folder not found!"
 fi
 
+sudo pacman -S qt5-graphicaleffects qt5-quickcontrols2 qt5-multimedia qt5-declarative
+yay -S sddm-qt6-git
+
 SDDM_THEMES="/usr/share/sddm/themes"
 CUSTOM_THEME_SRC="$SCRIPT_DIR/ls/davosSDDM"
 CUSTOM_THEME_DEST="$SDDM_THEMES/davosSDDM"
