@@ -97,6 +97,8 @@ git clone -b main --depth=1 https://github.com/uiriansan/SilentSDDM \
 && ./install.sh \
 && cd .. \
 && rm -rf SilentSDDM \
+&& sleep 2 \
+&& sudo sync \
 && sudo cp "$SCRIPT_DIR/visuals/backgrounds/background.jpg" /usr/share/sddm/themes/silent/backgrounds/smoky.jpg \
 && sudo sed -i 's/smoky\.jpg/background.jpg/g' /usr/share/sddm/themes/silent/configs/default.conf
 
